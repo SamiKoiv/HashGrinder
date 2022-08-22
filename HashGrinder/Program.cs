@@ -3,9 +3,11 @@ using System.Diagnostics;
 
 IHasher hasher = new Hash_SHA256();
 HashRootFinder finder = new(hasher);
-
+SeedGenerator seedGenerator = new();
+byte[] prompt;
 int roundCount;
 
+// Ask for round count
 while (true)
 {
     Console.Write("Enter round count: ");
@@ -14,30 +16,22 @@ while (true)
 
     Console.WriteLine();
 }
+Console.WriteLine();
 
 // First round prompt
-var seed = new byte[1];
-new Random().NextBytes(seed);
-Console.WriteLine($"First target seed: {Convert.ToHexString(seed)}");
-var prompt = hasher.Hash(seed);
-
-// Prompt validation
-if (prompt.Length % 2 != 0)
-{
-    throw new ArgumentException("Hex prompt cannot have odd number of characters");
-}
-
-Console.WriteLine();
+var seed = seedGenerator.Random(1);
 
 // Run cycles
 for (int round = 1; round <= roundCount; round++)
 {
-    Console.WriteLine($"--- ROUND {round} ---");
+    prompt = hasher.Hash(seed);
+
+    Console .WriteLine($"--- ROUND {round} ---");
+    Console.WriteLine($"Seed: {Convert.ToHexString(seed)}");
     Console.WriteLine($"Target: {Convert.ToHexString(prompt)}");
     var cycleTimer = Stopwatch.StartNew();
 
     const byte maxLength = byte.MaxValue;
-    //const byte maxLength = 3;
 
     byte[]? firstMatch = null;
 
@@ -53,7 +47,7 @@ for (int round = 1; round <= roundCount; round++)
     cycleTimer.Stop();
     Console.WriteLine();
     Console.WriteLine($"--- FINISHED ---");
-    Console.WriteLine($"Prompt: {Convert.ToHexString(prompt)}");
+    Console.WriteLine($"Target: {Convert.ToHexString(prompt)}");
 
     if (firstMatch == null)
     {
@@ -68,13 +62,5 @@ for (int round = 1; round <= roundCount; round++)
     Console.ReadLine();
 
     // Generate prompt for the next round
-    var newPrompt = new byte[prompt.Length + firstMatch.Length];
-
-    for (int i = 0; i < prompt.Length; i++)
-        newPrompt[i] = prompt[i];
-
-    for (var i = 0; i < firstMatch.Length; i++)
-        newPrompt[prompt.Length - 1 + i] = firstMatch[i];
-
-    prompt = hasher.Hash(newPrompt);
+    seed = seedGenerator.Merge(prompt, firstMatch);
 }
