@@ -51,6 +51,7 @@ for (int round = 1; round <= roundCount; round++)
     }
 
     cycleTimer.Stop();
+    Console.WriteLine();
     Console.WriteLine($"--- FINISHED ---");
     Console.WriteLine($"Prompt: {Convert.ToHexString(prompt)}");
 

@@ -47,7 +47,16 @@ namespace HashGrinder
                 }
 
                 hash = _hasher.Hash(bytes);
-                matchFound = hash.Equals(reference);
+
+                matchFound = true;
+                for(int h = 1; h < hash.Length; h++)
+                {
+                    if (hash[h] != reference[h])
+                    {
+                        matchFound = false;
+                        break;
+                    }
+                }
 
                 if (matchFound)
                     return bytes;
