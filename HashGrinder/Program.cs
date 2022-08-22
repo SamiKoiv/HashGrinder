@@ -4,6 +4,7 @@ using System.Diagnostics;
 IHasher hasher = new Hash_SHA256();
 HashRootFinder finder = new(hasher);
 SeedGenerator seedGenerator = new();
+byte[] seed;
 byte[] target;
 int roundCount;
 
@@ -22,7 +23,7 @@ while (true)
 }
 
 // First round target
-var seed = seedGenerator.Random(1);
+seed = seedGenerator.Random(1);
 
 // Run cycles
 for (int round = 1; round <= roundCount; round++)
