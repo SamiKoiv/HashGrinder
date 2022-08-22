@@ -2,7 +2,7 @@
 
 namespace HashGrinder
 {
-    internal class Hash_SHA256 : IHash
+    internal class Hash_SHA256 : IHasher
     {
         public byte[] Hash(byte[] bytes)
         {

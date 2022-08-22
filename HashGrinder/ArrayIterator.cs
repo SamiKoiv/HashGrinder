@@ -2,9 +2,9 @@
 {
     internal class HashRootFinder
     {
-        private readonly IHash _hasher;
+        private readonly IHasher _hasher;
 
-        public HashRootFinder(IHash hasher)
+        public HashRootFinder(IHasher hasher)
         {
             _hasher = hasher;
         }

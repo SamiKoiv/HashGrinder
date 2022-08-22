@@ -1,7 +1,7 @@
 ﻿using HashGrinder;
 using System.Diagnostics;
 
-IHash hasher = new Hash_SHA256();
+IHasher hasher = new Hash_SHA256();
 HashRootFinder finder = new(hasher);
 
 var testPrompt = "FF1151AFB20E9E4564838EF8075846449287597A4CDD7F598AFF8B36231792B1";

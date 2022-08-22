@@ -1,6 +1,6 @@
 ﻿namespace HashGrinder
 {
-    internal interface IHash
+    internal interface IHasher
     {
         byte[] Hash(byte[] bytes);
     }
