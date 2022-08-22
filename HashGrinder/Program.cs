@@ -7,6 +7,10 @@ SeedGenerator seedGenerator = new();
 byte[] prompt;
 int roundCount;
 
+Console.WriteLine("------------------");
+Console.WriteLine("|| HASH GRINDER ||");
+Console.WriteLine("------------------");
+
 // Ask for round count
 while (true)
 {
@@ -16,7 +20,6 @@ while (true)
 
     Console.WriteLine();
 }
-Console.WriteLine();
 
 // First round prompt
 var seed = seedGenerator.Random(1);
@@ -24,6 +27,7 @@ var seed = seedGenerator.Random(1);
 // Run cycles
 for (int round = 1; round <= roundCount; round++)
 {
+    Console.WriteLine();
     prompt = hasher.Hash(seed);
 
     ShowInfo.RoundStart(round, seed, prompt);
@@ -51,3 +55,7 @@ for (int round = 1; round <= roundCount; round++)
     // Generate prompt for the next round
     seed = seedGenerator.Merge(prompt, firstMatch);
 }
+
+Console.WriteLine();
+Console.WriteLine("END");
+Console.ReadLine();

@@ -21,7 +21,6 @@
                 Console.WriteLine($"First match: {Convert.ToHexString(firstMatch)}");
 
             Console.WriteLine($"Time: {elapsedMilliseconds} ms");
-            Console.ReadLine();
         }
     }
 }
