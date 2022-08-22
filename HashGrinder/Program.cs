@@ -4,48 +4,76 @@ using System.Diagnostics;
 IHasher hasher = new Hash_SHA256();
 HashRootFinder finder = new(hasher);
 
-var testPrompt = "FF1151AFB20E9E4564838EF8075846449287597A4CDD7F598AFF8B36231792B1";
+int roundCount;
 
-if (testPrompt.Length % 2 != 0)
+while (true)
+{
+    Console.Write("Enter round count: ");
+    if (int.TryParse(Console.ReadLine(), out roundCount))
+        break;
+
+    Console.WriteLine();
+}
+
+// First round prompt
+var seed = new byte[1];
+new Random().NextBytes(seed);
+Console.WriteLine($"First target seed: {Convert.ToHexString(seed)}");
+var prompt = hasher.Hash(seed);
+
+// Prompt validation
+if (prompt.Length % 2 != 0)
 {
     throw new ArgumentException("Hex prompt cannot have odd number of characters");
 }
 
-var promptBytes = testPrompt.HexToBytes();
+Console.WriteLine();
 
-//const byte maxLength = byte.MaxValue;
-const byte maxLength = 3;
-byte[] bytes = new byte[1];
-
-var timer = new Stopwatch();
-var totalTimer = Stopwatch.StartNew();
-
-byte[]? firstMatch = null;
-
-// Generate array with extending length
-for (int i = 1; i <= maxLength; i++)
+// Run cycles
+for (int round = 1; round <= roundCount; round++)
 {
-    timer.Restart();
-    firstMatch = finder.FindRoot(i, promptBytes);
+    Console.WriteLine($"--- ROUND {round} ---");
+    Console.WriteLine($"Target: {Convert.ToHexString(prompt)}");
+    var cycleTimer = Stopwatch.StartNew();
 
-    if (firstMatch != null)
-        break;
+    const byte maxLength = byte.MaxValue;
+    //const byte maxLength = 3;
 
-    Console.WriteLine($"DONE ({timer.ElapsedMilliseconds} ms)");
-    Console.WriteLine();
+    byte[]? firstMatch = null;
+
+    // Generate array with extending length
+    for (int i = 1; i <= maxLength; i++)
+    {
+        firstMatch = finder.FindRoot(i, prompt);
+
+        if (firstMatch != null)
+            break;
+    }
+
+    cycleTimer.Stop();
+    Console.WriteLine($"--- FINISHED ---");
+    Console.WriteLine($"Prompt: {Convert.ToHexString(prompt)}");
+
+    if (firstMatch == null)
+    {
+        Console.WriteLine($"First match: Not found.");
+        Console.WriteLine($"Time: {cycleTimer.ElapsedMilliseconds} ms");
+        return;
+    }
+
+    Console.WriteLine($"First match: {Convert.ToHexString(firstMatch)}");
+
+    Console.WriteLine($"Time: {cycleTimer.ElapsedMilliseconds} ms");
+    Console.ReadLine();
+
+    // Generate prompt for the next round
+    var newPrompt = new byte[prompt.Length + firstMatch.Length];
+
+    for (int i = 0; i < prompt.Length; i++)
+        newPrompt[i] = prompt[i];
+
+    for (var i = 0; i < firstMatch.Length; i++)
+        newPrompt[prompt.Length - 1 + i] = firstMatch[i];
+
+    prompt = hasher.Hash(newPrompt);
 }
-
-timer.Stop();
-
-Console.Write($"Prompt: {Convert.ToHexString(promptBytes)}");
-Console.WriteLine();
-
-if (firstMatch != null)
-    Console.Write($"FirstMatch: {Convert.ToHexString(firstMatch)}");
-else
-    Console.Write($"No match found.");
-Console.WriteLine();
-
-
-Console.WriteLine($"FINISHED in {totalTimer.ElapsedMilliseconds} ms");
-Console.ReadLine();

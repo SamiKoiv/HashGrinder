@@ -1,4 +1,6 @@
-﻿namespace HashGrinder
+﻿using System.Diagnostics;
+
+namespace HashGrinder
 {
     internal class HashRootFinder
     {
@@ -11,11 +13,16 @@
 
         public byte[]? FindRoot(int length, byte[] reference)
         {
+            var timer = Stopwatch.StartNew();
+
             var bytes = new byte[length];
             UInt64 maxChanges = Convert.ToUInt64(Math.Pow(byte.MaxValue, bytes.Length));
 
             Console.WriteLine();
             Console.WriteLine($"Iteration {length}, {maxChanges} individual values");
+
+            byte[] hash;
+            bool matchFound;
 
             // Assign values
             for (UInt64 j = 0; j <= maxChanges; j++)
@@ -39,14 +46,19 @@
                     continue;
                 }
 
-                var hash = _hasher.Hash(bytes);
-                var matchFound = hash.Equals(reference);
+                hash = _hasher.Hash(bytes);
+                matchFound = hash.Equals(reference);
 
                 if (matchFound)
                     return bytes;
 
                 bytes[0]++;
             }
+
+            timer.Stop();
+
+            Console.WriteLine($"DONE ({timer.ElapsedMilliseconds} ms)");
+            Console.WriteLine();
 
             return null;
         }
