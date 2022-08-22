@@ -45,6 +45,9 @@ for (int round = 1; round <= roundCount; round++)
     cycleTimer.Stop();
     ShowInfo.RoundResults(seed, prompt, firstMatch, cycleTimer.ElapsedMilliseconds);
 
+    if (firstMatch == null)
+        return;
+
     // Generate prompt for the next round
     seed = seedGenerator.Merge(prompt, firstMatch);
 }
