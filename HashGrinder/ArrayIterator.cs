@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HashGrinder
+﻿namespace HashGrinder
 {
-    internal class ArrayIterator
+    internal class HashRootFinder
     {
         private readonly IHash _hasher;
 
-        public ArrayIterator(IHash hasher)
+        public HashRootFinder(IHash hasher)
         {
             _hasher = hasher;
         }
 
-        public byte[]? Iterate(int length, byte[] reference)
+        public byte[]? FindRoot(int length, byte[] reference)
         {
             var bytes = new byte[length];
             UInt64 maxChanges = Convert.ToUInt64(Math.Pow(byte.MaxValue, bytes.Length));

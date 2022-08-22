@@ -2,7 +2,7 @@
 using System.Diagnostics;
 
 IHash hasher = new Hash_SHA256();
-ArrayIterator iterator = new(hasher);
+HashRootFinder finder = new(hasher);
 
 var testPrompt = "FF1151AFB20E9E4564838EF8075846449287597A4CDD7F598AFF8B36231792B1";
 
@@ -26,7 +26,7 @@ byte[]? firstMatch = null;
 for (int i = 1; i <= maxLength; i++)
 {
     timer.Restart();
-    firstMatch = iterator.Iterate(i, promptBytes);
+    firstMatch = finder.FindRoot(i, promptBytes);
 
     if (firstMatch != null)
         break;
