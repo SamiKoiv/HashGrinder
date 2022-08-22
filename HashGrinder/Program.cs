@@ -11,16 +11,7 @@ if (testPrompt.Length % 2 != 0)
     throw new ArgumentException("Hex prompt cannot have odd number of characters");
 }
 
-var arrayLength = testPrompt.Length / 2;
-var promptBytes = new byte[arrayLength];
-
-for (int i = 0; i < arrayLength; i++)
-{
-    var value = testPrompt.Skip(i * 2).Take(2).ToArray();
-    var stringValue = new string(value);
-    var byteValue = Convert.ToByte(stringValue, 16);
-    promptBytes[i] = byteValue;
-}
+var promptBytes = testPrompt.HexToBytes();
 
 //const byte maxLength = byte.MaxValue;
 const byte maxLength = 3;
