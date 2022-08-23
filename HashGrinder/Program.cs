@@ -27,7 +27,7 @@ while (true)
 // First round target
 seed = seedGenerator.Random(1);
 
-// Run cycles
+// Run rounds
 for (int round = 1; round <= roundCount; round++)
 {
     Console.WriteLine();
