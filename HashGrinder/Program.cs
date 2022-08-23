@@ -1,7 +1,9 @@
 ﻿using HashGrinder;
+using HashGrinder.Hashers;
+using HashGrinder.HashRootFinders;
 using System.Diagnostics;
 
-IHasher hasher = new Hash_SHA256();
+IHasher hasher = new Hasher_SHA256();
 HashRootFinder finder = new(hasher);
 SeedGenerator seedGenerator = new();
 byte[] seed;

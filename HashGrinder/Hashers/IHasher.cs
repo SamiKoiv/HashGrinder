@@ -1,4 +1,4 @@
-﻿namespace HashGrinder
+﻿namespace HashGrinder.Hashers
 {
     internal interface IHasher
     {

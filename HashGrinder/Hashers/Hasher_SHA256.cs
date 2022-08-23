@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 
-namespace HashGrinder
+namespace HashGrinder.Hashers
 {
-    internal class Hash_SHA256 : IHasher
+    internal class Hasher_SHA256 : IHasher
     {
         public byte[] Hash(byte[] bytes)
         {

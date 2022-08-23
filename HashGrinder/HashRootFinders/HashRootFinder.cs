@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using HashGrinder.Hashers;
 
-namespace HashGrinder
+namespace HashGrinder.HashRootFinders
 {
-    internal class HashRootFinder
+    internal class HashRootFinder : IHashRootFinder
     {
         private readonly IHasher _hasher;
 
@@ -17,7 +18,7 @@ namespace HashGrinder
             var processSeconds = 0;
 
             var bytes = new byte[length];
-            UInt64 maxChanges = Convert.ToUInt64(Math.Pow(byte.MaxValue, bytes.Length));
+            ulong maxChanges = Convert.ToUInt64(Math.Pow(byte.MaxValue, bytes.Length));
 
             Console.WriteLine();
             Console.WriteLine($"Iteration {length}, {maxChanges} individual values");
@@ -26,7 +27,7 @@ namespace HashGrinder
             bool matchFound;
 
             // Assign values
-            for (UInt64 j = 0; j <= maxChanges; j++)
+            for (ulong j = 0; j <= maxChanges; j++)
             {
                 // Over the cell max value
                 if (bytes[0] == byte.MaxValue)
@@ -50,7 +51,7 @@ namespace HashGrinder
                 hash = _hasher.Hash(bytes);
 
                 matchFound = true;
-                for(int h = 1; h < hash.Length; h++)
+                for (int h = 1; h < hash.Length; h++)
                 {
                     if (hash[h] != reference[h])
                     {
