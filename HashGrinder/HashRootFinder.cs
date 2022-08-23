@@ -14,6 +14,7 @@ namespace HashGrinder
         public byte[]? FindRoot(int length, byte[] reference)
         {
             var timer = Stopwatch.StartNew();
+            var processSeconds = 0;
 
             var bytes = new byte[length];
             UInt64 maxChanges = Convert.ToUInt64(Math.Pow(byte.MaxValue, bytes.Length));
@@ -62,6 +63,16 @@ namespace HashGrinder
                     return bytes;
 
                 bytes[0]++;
+
+                // Output progress info once per second
+                var seconds = (int)(timer.ElapsedMilliseconds * 0.001);
+                if (seconds != processSeconds)
+                {
+                    var progress = (double)j / maxChanges * 100;
+                    progress = Math.Round(progress, 2);
+                    Console.WriteLine($"{progress}% \t {j} / {maxChanges}");
+                    processSeconds = seconds;
+                }
             }
 
             timer.Stop();
