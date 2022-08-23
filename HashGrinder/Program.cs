@@ -4,7 +4,7 @@ using HashGrinder.HashRootFinders;
 using System.Diagnostics;
 
 IHasher hasher = new Hasher_SHA256();
-HashRootFinder finder = new(hasher);
+IHashRootFinder finder = new HashRootFinder(hasher);
 SeedGenerator seedGenerator = new();
 byte[] seed;
 byte[] target;
