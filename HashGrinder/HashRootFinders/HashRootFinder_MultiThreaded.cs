@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace HashGrinder.HashRootFinders
 {
-    internal class HashRootFinder_MultiThreaded
+    internal class HashRootFinder_MultiThreaded : IHashRootFinder
     {
         private readonly IHasher _hasher;
 
@@ -12,7 +12,7 @@ namespace HashGrinder.HashRootFinders
             _hasher = hasher;
         }
 
-        public byte[]? FindRoot(int length, byte[] reference)
+        public byte[]? FindRoot(byte[] reference, int length)
         {
             var result = FindRootThreaded(length, reference, 0, 1).Result;
             return result;

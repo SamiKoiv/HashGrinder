@@ -12,7 +12,7 @@ namespace HashGrinder.HashRootFinders
             _hasher = hasher;
         }
 
-        public byte[]? FindRoot(int length, byte[] reference)
+        public byte[]? FindRoot(byte[] reference, int length)
         {
             var timer = Stopwatch.StartNew();
             var processSeconds = 0;

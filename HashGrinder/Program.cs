@@ -4,7 +4,7 @@ using HashGrinder.HashRootFinders;
 using System.Diagnostics;
 
 IHasher hasher = new Hasher_SHA256();
-IHashRootFinder finder = new HashRootFinder(hasher);
+IHashRootFinder finder = new HashRootFinder_MultiThreaded(hasher);
 SeedGenerator seedGenerator = new();
 byte[] seed;
 byte[] target;
@@ -43,7 +43,7 @@ for (int round = 1; round <= roundCount; round++)
     // Generate array with extending length
     for (int i = 1; i <= maxLength; i++)
     {
-        firstMatch = finder.FindRoot(i, target);
+        firstMatch = finder.FindRoot(target, i);
 
         if (firstMatch != null)
             break;
