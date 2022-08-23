@@ -12,7 +12,24 @@ namespace HashGrinder.HashRootFinders
             _hasher = hasher;
         }
 
-        public byte[]? FindRoot(byte[] reference, int length)
+        public byte[]? FindRoot(byte[] reference)
+        {
+            const byte maxLength = byte.MaxValue;
+            byte[]? firstMatch = null;
+
+            // Generate array with extending length
+            for (int i = 1; i <= maxLength; i++)
+            {
+                firstMatch = RunArray(reference, i);
+
+                if (firstMatch != null)
+                    break;
+            }
+
+            return firstMatch;
+        }
+
+        public byte[]? RunArray(byte[] reference, int length)
         {
             var result = FindRootThreaded(length, reference, 0, 1).Result;
             return result;

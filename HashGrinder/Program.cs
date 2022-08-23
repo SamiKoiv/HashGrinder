@@ -36,18 +36,7 @@ for (int round = 1; round <= roundCount; round++)
     ShowInfo.RoundStart(round, seed, target);
     var cycleTimer = Stopwatch.StartNew();
 
-    const byte maxLength = byte.MaxValue;
-
-    byte[]? firstMatch = null;
-
-    // Generate array with extending length
-    for (int i = 1; i <= maxLength; i++)
-    {
-        firstMatch = finder.FindRoot(target, i);
-
-        if (firstMatch != null)
-            break;
-    }
+    var firstMatch = finder.FindRoot(target);
 
     cycleTimer.Stop();
     ShowInfo.RoundResults(seed, target, firstMatch, cycleTimer.ElapsedMilliseconds);

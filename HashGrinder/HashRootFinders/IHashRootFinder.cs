@@ -2,6 +2,6 @@
 {
     internal interface IHashRootFinder
     {
-        byte[]? FindRoot(byte[] reference, int length);
+        byte[]? FindRoot(byte[] reference);
     }
 }
