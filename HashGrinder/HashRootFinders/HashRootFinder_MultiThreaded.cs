@@ -31,14 +31,24 @@ namespace HashGrinder.HashRootFinders
 
         public byte[]? RunArray(byte[] reference, int length)
         {
-            var result = FindRootThreaded(length, reference, 0, 1).Result;
+            var result = FindRootThreaded(length, reference, 1).Result;
             return result;
         }
 
-        private async Task<byte[]?> FindRootThreaded(int length, byte[] reference, ulong offset, ulong increment)
+        private async Task<byte[]?> FindRootThreaded(int length, byte[] reference, uint threadCount)
         {
-            var result = await Task.Run(() => FindRoot(length, reference, offset, increment));
-            return result;
+            var tasks = new List<Task<byte[]?>>();
+
+            for (ulong i = 0; i < (ulong)threadCount; i++)
+            {
+                tasks.Add(Task.Run(() => FindRoot(length, reference, i, (ulong)threadCount)));
+            }
+
+            var results = await Task.WhenAll(tasks);
+            var firstResult = results.FirstOrDefault(x => x != null);
+
+            //var result = await Task.Run(() => FindRoot(length, reference, offset, increment));
+            return firstResult;
         }
 
         private byte[]? FindRoot(int length, byte[] reference, ulong offset, ulong increment)
